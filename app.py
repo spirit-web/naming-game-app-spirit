@@ -248,12 +248,12 @@ st.sidebar.header("Visualisering")
 
 animate_plot = st.sidebar.checkbox(
     "Animera kurvan",
-    value=False,
+    value=True,
     help="Visar hur den ledande symbolen växer fram steg för steg."
 )
 
 animation_speed = st.sidebar.slider(
-    "Animationshastighet",
+    "Tid mellan steg",
     0.01,
     0.30,
     0.12,
