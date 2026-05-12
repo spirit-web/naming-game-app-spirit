@@ -1,5 +1,6 @@
 import streamlit as st
 import time
+import gc
 import matplotlib.pyplot as plt
 
 from naming_game import run_naming_game
@@ -247,7 +248,7 @@ st.sidebar.header("Visualisering")
 
 animate_plot = st.sidebar.checkbox(
     "Animera kurvan",
-    value=True,
+    value=False,
     help="Visar hur den ledande symbolen växer fram steg för steg."
 )
 
@@ -272,7 +273,7 @@ if run_button:
         biased_fraction=biased_fraction,
         biased_symbol=biased_symbol,
         bias_strength=bias_strength,
-        log_points=120,
+        log_points=60,
     )
 
     
@@ -300,23 +301,39 @@ if run_button:
             plot_placeholder.pyplot(fig)
             plt.close(fig)
 
+            gc.collect()
             time.sleep(animation_speed)
     else:
-        st.pyplot(plot_top_symbol(history_df))
+        fig = plot_top_symbol(history_df)
+        st.pyplot(fig)
+        plt.close(fig)
+        gc.collect()
+
+
     st.info(
     "Visar hur stor andel av agenterna som använde den mest populära symbolen över tid. "
     "Om kurvan går mot 1 → systemet konvergerar."
     )    
 
     st.subheader("Slutlig symbolfördelning")
-    st.pyplot(plot_final_distribution(final_distribution))
+
+    fig = plot_final_distribution(final_distribution)
+    st.pyplot(fig)
+    plt.close(fig)
+    gc.collect()
+
     st.info(
     "Visar den genomsnittliga sannolikheten för varje symbol i populationen. "
     "En tydlig topp betyder att en symbol dominerar."
     )
 
     st.subheader("Agenternas slutliga preferenser")
-    st.pyplot(plot_agent_heatmap(agents_df))
+
+    fig = plot_agent_heatmap(agents_df)
+    st.pyplot(fig)
+    plt.close(fig)
+    gc.collect()
+
     st.info(
     "Varje rad är en agent och varje kolumn en symbol. "
     "Ljusa färger betyder hög sannolikhet. "
@@ -324,7 +341,12 @@ if run_button:
     )
 
     st.subheader("Agentpopulation")
-    st.pyplot(plot_agent_population(agents_df, biased_agents))
+
+    fig = plot_agent_population(agents_df, biased_agents)
+    st.pyplot(fig)
+    plt.close(fig)
+    gc.collect()
+
     st.info(
     "Varje punkt är en agent. "
     "Färg = vilken symbol agenten föredrar. "
