@@ -256,7 +256,7 @@ animation_speed = st.sidebar.slider(
     "Animationshastighet",
     0.01,
     0.30,
-    0.05,
+    0.12,
     step=0.01,
     help="Paus i sekunder mellan varje steg. Lägre värde ger snabbare animation."
 )  
